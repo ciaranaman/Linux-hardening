@@ -1,0 +1,16 @@
+name: Source checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Compile Python
+        run: python3 -m py_compile harden.py kali-hardening.py scripts/report.py
+      - name: Validate inputs and recovery logic without host changes
+        run: python3 -m unittest discover -s tests -v
